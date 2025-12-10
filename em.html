@@ -1,0 +1,613 @@
+<!--
+Stoneware v1 by Veteraning | Started on 19/11/2025 14:50 (circa) Ended on 10/12/2025 20:08 While finishing writing this
+
+Hey so if you're reading this welcome to inspect element i guess
+Please do not skid this. At first this project was made for fun
+and inspired by sandstone and buypass way to give free internet from
+the spyware that extension based web filters are. This is pretty similar
+but it uses more methods. Originally after like 90% finishing it i gave
+it to decayed/syntra21k but he and his little helper road.js got in a fight
+and destroyed syntra reputetion after saying to him that he should kill himself
+so he never used it and today he also got his new server deleted so he just soo
+fucked so now im uploading it to GitHub to hope someone or some people sees this
+and talk about it and hoping i get on some like exploiting docs or atp just recogn
+-ition. i also need to cleanup the code but yeah uhhh heres my name in ascii art: 
+
+    ___     ___     ___  ____   ____      __                             .__                          
+   /  /    /  /    /  /  \   \ /   /_____/  |_  ________________    ____ |__| ____    ____            
+  /  /    /  /    /  /    \   Y   // __ \   __\/ __ \_  __ \__  \  /    \|  |/    \  / ___\           
+ (  (    (  (    (  (      \     /\  ___/|  | \  ___/|  | \// __ \|   |  \  |   |  \/ /_/  >          
+  \  \    \  \    \  \      \___/  \___  >__|  \___  >__|  (____  /___|  /__|___|  /\___  /           
+   \__\    \__\    \__\                \/          \/           \/     \/        \//_____/            
+                                   ________           ___________                 ___     ___     ___ 
+                                   \_____  \   ____   \__    ___/___ ______      /  /    /  /    /  / 
+                                    /   |   \ /    \    |    | /  _ \\____ \    /  /    /  /    /  /  
+                                   /    |    \   |  \   |    |(  |_| )  |_| |  (  (    (  (    (  (   
+                                   \_______  /___|  /   |____| \____/|   __/    \  \    \  \    \  \  
+                                           \/     \/                 |__|        \__\    \__\    \__\ 
+
+-->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>StoneWare Embedder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <style>
+        body {
+            margin: 0;
+            background: #0d0f14;
+            color: #e4e4e4;
+            font-family: Inter, system-ui, sans-serif;
+            overflow-x: hidden;
+          }
+    
+          #topbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            height: 64px;
+            background: #14161c;
+             border-bottom: 1px solid #1f2229;
+             display: flex; align-items: center;
+              padding: 12px 18px;
+            box-sizing: border-box;
+             z-index: 999;
+             gap: 12px;
+          }
+    
+          #title {
+            font-size: 20px;
+             font-weight: 700;
+              color: #d5d7dc;
+            display: flex;
+             align-items: center;
+              gap: 10px;
+          }
+    
+          #title i {
+             color: #a8e6cf;
+              font-size: 26px;
+             }
+    
+          #urlInputTop {
+            flex: 1; max-width: 600px;
+             padding: 12px 16px;
+            border-radius: 12px;
+             border: 1px solid #2a2d35;
+            background: #161820;
+             color: #eee;
+              font-size: 15px;
+          }
+    
+          #loadBtnTop {
+            padding: 12px 28px; 
+            background: #0ddb90;
+            border: 1px solid #3a3e49;
+             border-radius: 12px;
+            cursor: pointer;
+             font-weight: 600; transition: .2s;
+          }
+          #loadBtnTop:hover {
+             background: #333641;
+             }
+    
+          #settingsBtn {
+            padding: 10px 18px;
+             background: #1e2028;
+            border: 1px solid #2c303b;
+             border-radius: 12px;
+            cursor: pointer;
+          }
+    
+          #settingsPanel {
+            position: fixed; top: 64px;
+             right: 0; width: 460px;
+            height: calc(100% - 64px); 
+            background: #111319;
+            border-left: 1px solid #232733;
+             padding: 24px;
+            box-sizing: border-box; 
+            overflow-y: auto;
+            transform: translateX(100%);
+             transition: .3s; z-index: 998;
+          }
+          #settingsPanel.open {
+             transform: translateX(0);
+             }
+    
+          #content {
+            margin-top: 64px;
+            height: calc(100vh - 64px);
+            display: flex; transition: .3s;
+          }
+          #content.sidebar-open {
+             margin-right: 460px;
+             }
+    
+          #mainContent {
+            flex: 1;
+             padding: 20px;
+             overflow: hidden;
+          }
+    
+         #output {
+      width: 100%; height: 100%;
+       background: #0b0c10;
+      border: 1px solid #1c1f27;
+       border-radius: 16px;
+      padding: 20px;
+       box-sizing: border-box;
+      overflow: auto;
+       opacity: 1;
+      transition: opacity .25s ease;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    
+    }
+    
+          select {
+            width: 100%; padding: 12px;
+             border-radius: 10px;
+            background: #24262f;
+             border: 1px solid #323641;
+            color: #dedede;
+             margin: 10px 0 20px;
+              font-size: 14px;
+          }
+    
+          .group {
+             margin-bottom: 26px;
+             }
+
+          .group h4 {
+            margin: 0 0 10px;
+             color: #a8e6cf;
+              font-size: 16px;
+          }
+          .warning { 
+            color:#ff6b6b;
+             font-size:13px; 
+            }
+    
+          .loading {
+            font-size: 16px;
+             opacity: .8;
+            animation: pulse 0.7s infinite alternate;
+          }
+    
+          @keyframes pulse {
+            from {
+                opacity: 0.35;
+             }
+            to   { 
+                opacity: 1;
+             }
+          }
+    </style>
+</head>
+
+<body>
+
+    <div id="topbar">
+        <div id="title"><i class="fa-solid fa-cubes"></i> StoneWare Embedder</div>
+
+        <input id="urlInputTop" placeholder="Enter URL or search term…" autofocus>
+        <button id="loadBtnTop" onclick="loadContent()">⏻ Load ⏻</button>
+        <div id="settingsBtn" onclick="toggleSettings()">Methods</div>
+    </div>
+
+    <div id="settingsPanel">
+        <div class="group">
+            <h4>Embedding Method</h4>
+            <select id="method">
+                <option value="iframeSandbox" selected>iframe + Sandbox (Default)</option>
+                <option value="embedTag">embed tag</option>
+                <option value="objectTag">object tag</option>
+                <option value="blobEmbed">Blob URL</option>
+                <option value="dataUrl">data:text/html</option>
+                <option value="base64Render">Base64 Render</option>
+                <option value="innerHTML">Raw innerHTML</option>
+                <option value="shadowDom">Shadow DOM</option>
+                <option value="domParser">DOMParser (no scripts)</option>
+                <option value="foreignObject">SVG foreignObject</option>
+                <option value="templateTag">template tag</option>
+                <option value="portal">portal element</option>
+                <option value="pdfJs">PDF.js viewer</option>
+                <option value="cssImport">@import CSS</option>
+                <option value="cssBackground">CSS background-image</option>
+                <option value="canvasTextOnly">Canvas Text</option>
+                <option value="textDump">Raw Text</option>
+                <option value="jsonViewer">JSON Viewer</option>
+                <option value="ReaderMode">ReaderMode</option>
+                <option value="ReaderBooster">Reader Booster</option>
+                <option value="DOMSnapshot">DOM Snapshot</option>
+                <option value="InnerTextOnly">InnerTextOnly</option>
+                <option value="LinkListExtractor">Link Extractor</option>
+                <option value="HTTPHeaders">HTTP Headers</option>
+                <option value="CredentialLessIframeAuto">Credentialless iFrame</option>
+                <option value="ProxySearchEmbed">Proxy Search Embed</option>
+                <option value="AutoProxyFallback">Auto Proxy Fallback</option>
+                <option value="ScreenshotAPI">Screenshot Fallback</option>
+                <option value="MHTMLViewer">MHTML Viewer</option>
+                <option value="HTMLIncludeFetch">HTML Include Fetch</option>
+            </select>
+        </div>
+
+        <div class="group">
+            <h4>Proxy Provider (Only use if filters gone wild)</h4>
+            <select id="proxySelect">
+  <option value="">No Proxy (Direct)</option>
+  <option value="cors.bridged">Bridged CORS (cors.bridged.cc)</option>
+  <option value="allorigins">AllOrigins (api.allorigins.win)</option>
+  <option value="codetabs">CodeTabs</option>
+  <option value="corsfix">CorsFix</option>
+  <option value="thingproxy">ThingProxy</option>
+  <option value="yacdn">YaCDN</option>
+  <option value="corsanywhere">CORS Anywhere (public)</option>
+  <option value="scrapestack">Scrapestack API</option>
+  <option value="proxyapi">ProxyAPI.dev</option>
+  <option value="corsproxyio">corsproxy.io</option>
+</select>
+
+        </div>
+    </div>
+
+    <div id="content">
+        <div id="mainContent">
+            
+            <div id="output">
+           <pre>
+      _________ __                       __      __                        .____    ____. 
+     /   _____//  |_  ____   ____   ____/  \    /  \_____ _______   ____   |   _|  |_   | 
+     \_____  \\   __\/  _ \ /    \_/ __ \   \/\/   /\__  \\_  __ \_/ __ \  |  |      |  | 
+     /        \|  | (  <_> )   |  \  ___/\        /  / __ \|  | \/\  ___/  |  |      |  | 
+    /_______  /|__|  \____/|___|  /\___  >\__/\  /  (____  /__|    \___  > |  |_    _|  | 
+            \/                  \/     \/      \/        \/            \/  |____|  |____| 
+
+    Welcome to StoneWare - A project made by Veteraning to try and find new ways of Embedding.
+    This was EXTREMELY inspired by SandStone and buypass way of making a "pr0xy" in a single
+    HTML file. This is very different tho... SandStone way of bypassing extension based web
+    filters way by rewriting the URL, iframing it with a sandbox and a lot of other stuff while
+    this one works by using nieche and unknown ways to embed sites like the object tag and others
+    it also uses cors proxies that are used to scrape to instead load pages. This is mainly built
+    for playing online games like 1v1.lol and Run3 not to use as an actual proxy or run more
+    robust online games lik Eaglercraft and other online ports like Hollow Knight and others. </pre></div>
+        </div>
+    </div>
+    <script id="mainScript">
+        (() => {  
+        
+        function showLoading() {
+          const o = document.getElementById("output");
+          o.style.opacity = 0.2;
+          o.innerHTML = `<p class="loading">Loading…</p>`;
+        }
+        
+        function showContent(html) {
+          const o = document.getElementById("output");
+          o.style.opacity = 0;
+          setTimeout(() => {
+            o.innerHTML = html;
+            o.style.opacity = 1;
+          }, 200);
+        }
+        
+        function toggleSettings() {
+          const panel = document.getElementById("settingsPanel");
+          const content = document.getElementById("content");
+          if (!panel || !content) return;
+          panel.classList.toggle("open");
+          content.classList.toggle("sidebar-open");
+        }
+        
+        function escapeHtml(t) {
+          const d = document.createElement("div");
+          d.textContent = t;
+          return d.innerHTML;
+        }
+        
+        function isValidUrl(str) {
+          try { new URL(str); return true; } catch { return false; }
+        }
+        
+        function getMethod() {
+          return document.getElementById("method").value;
+        }
+        
+        const proxies = {
+        
+          corsbridged: url => `https://cors.bridged.cc/${url}`,
+          allorigins: url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+          codetabs: url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+          corsfix: url => `https://proxy.corsfix.com/?${url}`,
+          thingproxy: url => `https://thingproxy.freeboard.io/fetch/${url}`,
+          yacdn: url => `https://yacdn.org/proxy/${encodeURIComponent(url)}`,
+          corsanywhere: url => `https://cors-anywhere.herokuapp.com/${url}`,
+          corsproxyio: url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+          scrapestack: url => `http://api.scrapestack.com/scrape?access_key=YOUR_KEY&url=${encodeURIComponent(url)}`,
+          proxyapi: url => `https://proxyapi.dev/proxy?url=${encodeURIComponent(url)}`,
+        };
+        
+        
+        function getProxyUrl(targetUrl) {
+          const sel = document.getElementById("proxySelect").value;
+          if (!sel) return targetUrl;
+        
+          if (proxies[sel])
+            return proxies[sel](targetUrl);
+        
+          return targetUrl;
+        }
+        
+        async function tryFetchJson(url) {
+          try {
+            const res = await fetch(url, { headers: { "Accept": "application/json" } });
+            const text = await res.text();
+            return JSON.parse(text);
+          } catch { return null; }
+        }
+        
+        async function embedWithProxy(url) {
+          const proxyUrl = getProxyUrl(url);
+          showContent(`
+            <iframe sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"
+              src="${proxyUrl}" style="width:100%;height:100%;border:none;border-radius:12px;"></iframe>
+          `);
+        }
+        
+        async function proxySearch(term) {
+          const proxyUrl = getProxyUrl(`https://searx.kavin.rocks//search?q=${encodeURIComponent(term)}`);
+          showContent(`<iframe src="${proxyUrl}" style="width:100%;height:100%;border:none;"></iframe>`);
+        }
+        
+        async function loadContent() {
+          let input = document.getElementById("urlInputTop").value.trim();
+          if (!input) return;
+          showLoading();
+        
+          let url = input;
+        
+          if (!isValidUrl(input)) {
+            if (input.includes(".")) url = "https://" + input;
+            if (!isValidUrl(url)) return proxySearch(input);
+          }
+        
+          const method = getMethod();
+        
+          try {
+            switch (method) {
+        
+              case "iframeSandbox":
+                showContent(`
+                  <iframe sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"
+                    src="${url}" style="width:100%;height:100%;border:none;"></iframe>
+                `);
+                break;
+        
+              case "embedTag":
+                showContent(`<embed src="${url}" style="width:100%;height:100%;">`);
+                break;
+        
+              case "objectTag":
+                showContent(`<object data="${url}" style="width:100%;height:100%;"></object>`);
+                break;
+        
+              case "blobEmbed": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const blob = new Blob([text], { type: "text/html" });
+                const blobURL = URL.createObjectURL(blob);
+                showContent(`<iframe src="${blobURL}" style="width:100%;height:100%;border:none;"></iframe>`);
+                break;
+              }
+        
+              case "dataUrl": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const encoded = "data:text/html;base64," + btoa(text);
+                showContent(`<iframe src="${encoded}" style="width:100%;height:100%;border:none;"></iframe>`);
+                break;
+              }
+        
+              case "base64Render": {
+                const res = await fetch(url);
+                const text = await res.text();
+                showContent(`<pre>${escapeHtml(btoa(text))}</pre>`);
+                break;
+              }
+        
+              case "innerHTML": {
+                const res = await fetch(url);
+                const text = await res.text();
+                showContent(text);
+                break;
+              }
+        
+              case "shadowDom": {
+                const res = await fetch(url);
+                const text = await res.text();
+                showContent(`<div id="shadowHost"></div>`);
+                const host = document.getElementById("shadowHost");
+                host.attachShadow({ mode: "open" }).innerHTML = text;
+                break;
+              }
+        
+              case "domParser": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const doc = new DOMParser().parseFromString(text, "text/html");
+                showContent(doc.documentElement.outerHTML);
+                break;
+              }
+        
+              case "foreignObject": {
+                const res = await fetch(url);
+                const text = await res.text();
+                showContent(`
+                  <svg width="100%" height="100%">
+                    <foreignObject width="100%" height="100%">
+                      <div xmlns="http://www.w3.org/1999/xhtml">${text}</div>
+                    </foreignObject>
+                  </svg>
+                `);
+                break;
+              }
+        
+              case "templateTag": {
+                const res = await fetch(url);
+                const text = await res.text();
+                showContent(`<template id="tpl"></template>`);
+                const tpl = document.getElementById("tpl");
+                tpl.innerHTML = text;
+                showContent(tpl.innerHTML);
+                break;
+              }
+        
+              case "portal":
+                showContent(`<p class="warning">Portal tag removed from browsers.</p>`)
+                break;
+        
+              case "pdfJs":
+                if (!url.toLowerCase().endsWith(".pdf"))
+                  return showContent(`<p class="warning">Not a PDF</p>`);
+                showContent(`
+                  <iframe
+                    src="https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(url)}"
+                    style="width:100%;height:100%;border:none;"></iframe>
+                `);
+                break;
+        
+              case "jsonViewer": {
+                const j = await tryFetchJson(url);
+                if (!j) return showContent(`<p class="warning">Invalid JSON or CORS blocked.</p>`);
+                showContent(`<pre>${escapeHtml(JSON.stringify(j, null, 2))}</pre>`);
+                break;
+              }
+        
+              case "cssImport":
+                showContent(`<style>@import url("${url}");</style><p>CSS imported.</p>`);
+                break;
+        
+              case "cssBackground":
+                showContent(`
+                  <div style="
+                    background:url('${url}') center/cover no-repeat;
+                    width:100%;height:100%;border-radius:16px;"></div>
+                `);
+                break;
+        
+              case "canvasTextOnly": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const escaped = escapeHtml(text);
+                showContent(`<pre>${escaped}</pre>`);
+                break;
+              }
+        
+              case "textDump": {
+                const res = await fetch(url);
+                showContent(`<pre>${escapeHtml(await res.text())}</pre>`);
+                break;
+              }
+        
+              case "ReaderMode": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const doc = new DOMParser().parseFromString(text, "text/html");
+                showContent(`<h1>${doc.title}</h1><div>${doc.body.innerText}</div>`);
+                break;
+              }
+        
+              case "ReaderBooster": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const doc = new DOMParser().parseFromString(text, "text/html");
+                showContent(`<article>${doc.body.innerText.replace(/\n\n+/g, "<br><br>")}</article>`);
+                break;
+              }
+        
+              case "DOMSnapshot": {
+                const res = await fetch(url);
+                const text = await res.text();
+                showContent(`<pre>${escapeHtml(text)}</pre>`);
+                break;
+              }
+        
+              case "InnerTextOnly": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const doc = new DOMParser().parseFromString(text, "text/html");
+                showContent(`<pre>${escapeHtml(doc.body.innerText)}</pre>`);
+                break;
+              }
+        
+              case "LinkListExtractor": {
+                const res = await fetch(url);
+                const text = await res.text();
+                const doc = new DOMParser().parseFromString(text, "text/html");
+                const links = [...doc.querySelectorAll("a")].map(a => a.href);
+                showContent(`<pre>${escapeHtml(links.join("\n"))}</pre>`);
+                break;
+              }
+        
+              case "HTTPHeaders":
+                showContent(`<p class="warning">Cannot read headers due to CORS.</p>`);
+                break;
+        
+              case "CredentialLessIframeAuto":
+                showContent(`
+                  <iframe credentialless src="${url}" style="width:100%;height:100%;border:none;"></iframe>
+                `);
+                break;
+        
+              case "ProxySearchEmbed":
+                return proxySearch(url);
+        
+              case "AutoProxyFallback":
+                return embedWithProxy(url);
+        
+              case "ScreenshotAPI":
+                showContent(`<p class="warning">Screenshot API not implemented yet.</p>`);
+                break;
+        
+              case "MHTMLViewer":
+                showContent(`<p class="warning">MHTML unsupported by browsers.</p>`);
+                break;
+        
+              case "HTMLIncludeFetch": {
+                const res = await fetch(url);
+                showContent(`<div>${escapeHtml(await res.text())}</div>`);
+                break;
+              }
+        
+              default:
+                showContent(`<iframe src="${url}" style="width:100%;height:100%;border:none;"></iframe>`);
+            }
+        
+          } catch(err) {
+            console.error(err);
+            embedWithProxy(url);
+          }
+        }
+         /* ----------------- RACIAL SLURS!!!!!! ---------------- */
+        window.toggleSettings = toggleSettings;
+        window.loadContent = loadContent;
+        
+        document.getElementById("urlInputTop")
+          .addEventListener("keypress", e => {
+            if (e.key === "Enter") loadContent();
+          });
+        
+        })();
+    </script>
+</body>
+
+</html>
