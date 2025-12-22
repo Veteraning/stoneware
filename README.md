@@ -3,7 +3,7 @@
 
 ## How does this work and is this any good?
 
-Well theoretically yes but also no, Some filter checkers like goguardian and linewize dont block iframes so these will probably work just fine but if any filter works by blocking any url in the page then this wont work UNLESS you use the proxy option in the html page.
+Well theoretically yes but also no, Some filter checkers like goguardian and linewize dont block iframes so these will probably work just fine but if any filter works by blocking any url in the page then this wont work UNLESS they update they stuff
 
 ## What site would you reccomend
 
@@ -15,4 +15,4 @@ It first came to mind when i saw skidded proxies by astro and buypass and had th
 
 ## Anything else to say?
 
-This will not work on network based blocking unless you use the proxy method. Also if you have any problems at all check what the embed method you are using does (example: "<portal> tag what does it do html")
+This will not work on network based blocking unless you use a proxy with it (which is useless). Also if you have any problems at all check what the embed method you are using does (example: "<portal> tag what does it do html")
