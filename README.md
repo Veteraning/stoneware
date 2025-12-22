@@ -1,4 +1,7 @@
 # StoneWare
+--
+https://veteraning.github.io/stoneware
+--
 ### A new method to bypass school restrictions by using unknown ways to embed a site
 
 ## How does this work and is this any good?
